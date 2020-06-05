@@ -1,42 +1,42 @@
-defmodule SearchyMigration do
+defmodule Searchy.Ecto.Migration do
   defmacro __using__(_opts) do
     quote do
-      import SearchyMigration, only: [create_ecto_searchy_type: 2, drop_ecto_searchy_type: 1]
+      import Searchy.Ecto.Migration, only: [create_searchy_type: 2, drop_searchy_type: 1]
     end
   end
 
-  defmacro create_ecto_searchy_type(table_name, fields) do
+  defmacro create_searchy_type(table_name, fields) do
     quote location: :keep do
       unquote(table_name)
-      |> SearchyMigration.__create_ecto_searchy_function_sql__(:search_tsvector, unquote(fields))
+      |> Searchy.Ecto.Migration.__create_searchy_function_sql__(:search_tsvector, unquote(fields))
       |> Ecto.Migration.execute()
 
       unquote(table_name)
-      |> SearchyMigration.__create_ecto_searchy_trigger_sql__()
+      |> Searchy.Ecto.Migration.__create_searchy_trigger_sql__()
       |> Ecto.Migration.execute()
     end
   end
 
-  defmacro drop_ecto_searchy_type(table_name) do
+  defmacro drop_searchy_type(table_name) do
     quote location: :keep do
       unquote(table_name)
-      |> SearchyMigration.__drop_ecto_searchy_trigger_sql__()
+      |> Searchy.Ecto.Migration.__drop_searchy_trigger_sql__()
       |> Ecto.Migration.execute()
 
       unquote(table_name)
-      |> SearchyMigration.__drop_ecto_searchy_function_sql__()
+      |> Searchy.Ecto.Migration.__drop_searchy_function_sql__()
       |> Ecto.Migration.execute()
 
       # TODO: Also drop column from table?
     end
   end
 
-  defp expand_function_name(table_name), do: "#{table_name}_ecto_searchy_trigger"
+  defp expand_function_name(table_name), do: "#{table_name}_searchy_trigger"
 
-  defp expand_trigger_name(table_name), do: "#{table_name}_ecto_searchy_function"
+  defp expand_trigger_name(table_name), do: "#{table_name}_searchy_function"
 
   @doc false
-  def __create_ecto_searchy_trigger_sql__(table_name) do
+  def __create_searchy_trigger_sql__(table_name) do
     """
     CREATE TRIGGER #{expand_trigger_name(table_name)}
     BEFORE INSERT OR UPDATE ON #{table_name}
@@ -45,12 +45,12 @@ defmodule SearchyMigration do
   end
 
   @doc false
-  def __drop_ecto_searchy_trigger_sql__(table_name) do
+  def __drop_searchy_trigger_sql__(table_name) do
     "DROP TRIGGER #{expand_trigger_name(table_name)} ON #{table_name}"
   end
 
   @doc false
-  def __create_ecto_searchy_function_sql__(table_name, field, fields) do
+  def __create_searchy_function_sql__(table_name, field, fields) do
     to_sql = fn field ->
       "setweight(to_tsvector('pg_catalog.english', coalesce(new.\"#{field}\"::TEXT,'')), 'A')"
     end
@@ -72,7 +72,7 @@ defmodule SearchyMigration do
   end
 
   @doc false
-  def __drop_ecto_searchy_function_sql__(table_name) do
+  def __drop_searchy_function_sql__(table_name) do
     "DROP FUNCTION #{expand_function_name(table_name)}"
   end
 end

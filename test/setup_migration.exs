@@ -1,7 +1,7 @@
 defmodule Searchy.SetupMigration do
   use Ecto.Migration
 
-  import SearchyMigration
+  import Searchy.Ecto.Migration
 
   def up do
     create table(:schema_fixture) do
@@ -13,12 +13,12 @@ defmodule Searchy.SetupMigration do
       timestamps()
     end
 
-    create_ecto_searchy_type(:schema_fixture, [:name, :age, :strict, :inserted_at])
+    create_searchy_type(:schema_fixture, [:name, :age, :strict, :inserted_at])
   end
 
   def down do
     drop(table("schema_fixture"))
 
-    drop_ecto_searchy_type(:schema_fixture)
+    drop_searchy_type(:schema_fixture)
   end
 end

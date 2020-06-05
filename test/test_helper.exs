@@ -15,13 +15,12 @@ Application.put_env(:ecto_searchy, Searchy.TestRepo,
 
 defmodule Searchy.SchemaFixture do
   use Ecto.Schema
-  use Searchy
 
   schema "schema_fixture" do
     field(:name, :string)
     field(:age, :integer)
     field(:strict, :boolean)
-    field(:search_tsvector, Searchy.Ecto.TSVectorType)
+    field(:search_tsvector, Searchy.Ecto.Types.TSVector)
 
     timestamps()
   end
