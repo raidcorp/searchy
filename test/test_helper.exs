@@ -13,13 +13,13 @@ Application.put_env(:ecto_searchy, Searchy.TestRepo,
   pool: Ecto.Adapters.SQL.Sandbox
 )
 
-defmodule Searchy.SchemaFixture do
+defmodule Searchy.User do
   use Ecto.Schema
 
-  schema "schema_fixture" do
+  schema "users" do
     field(:name, :string)
     field(:age, :integer)
-    field(:strict, :boolean)
+    field(:active?, :boolean)
     field(:search_tsvector, Searchy.Ecto.Types.TSVector)
 
     timestamps()

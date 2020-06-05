@@ -4,21 +4,21 @@ defmodule Searchy.SetupMigration do
   import Searchy.Ecto.Migration
 
   def up do
-    create table(:schema_fixture) do
+    create table(:users) do
       add(:name, :string)
       add(:age, :integer)
-      add(:strict, :boolean)
+      add(:active?, :boolean)
       add(:search_tsvector, :tsvector)
 
       timestamps()
     end
 
-    create_searchy_type(:schema_fixture, [:name, :age, :strict, :inserted_at])
+    create_searchy_type(:users, [:name, :age, :active?, :inserted_at])
   end
 
   def down do
-    drop(table("schema_fixture"))
+    drop(table("users"))
 
-    drop_searchy_type(:schema_fixture)
+    drop_searchy_type(:users)
   end
 end
