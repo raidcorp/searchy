@@ -8,7 +8,7 @@ defmodule EctoSearchyMigration do
   defmacro create_ecto_searchy_type(table_name, fields) do
     quote location: :keep do
       unquote(table_name)
-      |> EctoSearchyMigration.__create_ecto_searchy_function_sql__(unquote(fields))
+      |> EctoSearchyMigration.__create_ecto_searchy_function_sql__(:search_tsvector, unquote(fields))
       |> Ecto.Migration.execute()
 
       unquote(table_name)
@@ -35,8 +35,6 @@ defmodule EctoSearchyMigration do
 
   defp expand_trigger_name(table_name), do: "#{table_name}_ecto_searchy_function"
 
-  defp expand_column_name(table_name), do: "#{table_name}_ecto_searchy"
-
   @doc false
   def __create_ecto_searchy_trigger_sql__(table_name) do
     """
@@ -52,7 +50,7 @@ defmodule EctoSearchyMigration do
   end
 
   @doc false
-  def __create_ecto_searchy_function_sql__(table_name, fields) do
+  def __create_ecto_searchy_function_sql__(table_name, field, fields) do
     to_sql = fn field ->
       "setweight(to_tsvector('pg_catalog.english', coalesce(new.#{field}::TEXT,'')), 'A')"
     end
@@ -60,13 +58,13 @@ defmodule EctoSearchyMigration do
     definition =
       fields
       |> Enum.map(&to_sql.(&1))
-      |> Enum.join("||")
+      |> Enum.join(" || ")
 
     """
     CREATE OR REPLACE FUNCTION #{expand_function_name(table_name)}()
     RETURNS trigger AS $$
     begin
-      new.\"#{expand_column_name(table_name)}\" := #{definition};
+      new.\"#{field}\" := #{definition};
       return new;
     end
     $$ LANGUAGE plpgsql;
