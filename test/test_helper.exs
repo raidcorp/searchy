@@ -20,6 +20,7 @@ defmodule EctoSearchy.SchemaFixture do
   schema "schema_fixture" do
     field(:name, :string)
     field(:age, :integer)
+    field(:strict, :boolean)
     field(:search_tsvector, EctoSearchy.Ecto.TSVectorType)
 
     timestamps()

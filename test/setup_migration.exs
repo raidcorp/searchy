@@ -7,12 +7,13 @@ defmodule EctoSearchy.SetupMigration do
     create table(:schema_fixture) do
       add(:name, :string)
       add(:age, :integer)
+      add(:strict, :boolean)
       add(:search_tsvector, :tsvector)
 
       timestamps()
     end
 
-    create_ecto_searchy_type(:schema_fixture, [:name, :age, :inserted_at])
+    create_ecto_searchy_type(:schema_fixture, [:name, :age, :strict, :inserted_at])
   end
 
   def down do

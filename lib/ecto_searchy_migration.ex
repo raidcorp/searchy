@@ -52,7 +52,7 @@ defmodule EctoSearchyMigration do
   @doc false
   def __create_ecto_searchy_function_sql__(table_name, field, fields) do
     to_sql = fn field ->
-      "setweight(to_tsvector('pg_catalog.english', coalesce(new.#{field}::TEXT,'')), 'A')"
+      "setweight(to_tsvector('pg_catalog.english', coalesce(new.\"#{field}\"::TEXT,'')), 'A')"
     end
 
     definition =
