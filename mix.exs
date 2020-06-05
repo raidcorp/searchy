@@ -1,4 +1,4 @@
-defmodule EctoSearchy.MixProject do
+defmodule Searchy.MixProject do
   use Mix.Project
 
   def project do

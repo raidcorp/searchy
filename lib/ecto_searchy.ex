@@ -1,11 +1,11 @@
-defmodule EctoSearchy do
+defmodule Searchy do
   require Ecto.Schema
 
-  alias EctoSearchy.Ecto.TSVectorType
+  alias Searchy.Ecto.TSVectorType
 
   defmacro __using__(_opts) do
     quote do
-      import EctoSearchy, only: [tsvector_field: 0]
+      import Searchy, only: [tsvector_field: 0]
     end
   end
 

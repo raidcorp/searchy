@@ -1,10 +1,10 @@
-defmodule EctoSearchyTest do
+defmodule SearchyTest do
   use ExUnit.Case
   import Ecto.Query
 
-  alias EctoSearchy.{TestRepo, SchemaFixture}
+  alias Searchy.{TestRepo, SchemaFixture}
 
-  doctest EctoSearchy
+  doctest Searchy
 
   setup do
     TestRepo.delete_all(SchemaFixture)

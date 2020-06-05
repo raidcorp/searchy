@@ -1,6 +1,6 @@
 ExUnit.start()
 
-defmodule EctoSearchy.TestRepo do
+defmodule Searchy.TestRepo do
   use Ecto.Repo, otp_app: :ecto_searchy, adapter: Ecto.Adapters.Postgres
 
   def log(_cmd), do: nil
@@ -8,33 +8,33 @@ defmodule EctoSearchy.TestRepo do
   def reload(%{id: id} = item), do: __MODULE__.get(item.__struct__, id)
 end
 
-Application.put_env(:ecto_searchy, EctoSearchy.TestRepo,
+Application.put_env(:ecto_searchy, Searchy.TestRepo,
   url: "ecto://postgres:postgres@localhost/ecto_searchy",
   pool: Ecto.Adapters.SQL.Sandbox
 )
 
-defmodule EctoSearchy.SchemaFixture do
+defmodule Searchy.SchemaFixture do
   use Ecto.Schema
-  use EctoSearchy
+  use Searchy
 
   schema "schema_fixture" do
     field(:name, :string)
     field(:age, :integer)
     field(:strict, :boolean)
-    field(:search_tsvector, EctoSearchy.Ecto.TSVectorType)
+    field(:search_tsvector, Searchy.Ecto.TSVectorType)
 
     timestamps()
   end
 end
 
-_ = Ecto.Adapters.Postgres.storage_down(EctoSearchy.TestRepo.config())
+_ = Ecto.Adapters.Postgres.storage_down(Searchy.TestRepo.config())
 
-:ok = Ecto.Adapters.Postgres.storage_up(EctoSearchy.TestRepo.config())
+:ok = Ecto.Adapters.Postgres.storage_up(Searchy.TestRepo.config())
 
-{:ok, _pid} = EctoSearchy.TestRepo.start_link()
+{:ok, _pid} = Searchy.TestRepo.start_link()
 
 Code.require_file("setup_migration.exs", __DIR__)
 
-:ok = Ecto.Migrator.up(EctoSearchy.TestRepo, 0, EctoSearchy.SetupMigration, log: false)
+:ok = Ecto.Migrator.up(Searchy.TestRepo, 0, Searchy.SetupMigration, log: false)
 
-Ecto.Adapters.SQL.Sandbox.mode(EctoSearchy.TestRepo, {:shared, self()})
+Ecto.Adapters.SQL.Sandbox.mode(Searchy.TestRepo, {:shared, self()})

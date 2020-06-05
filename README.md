@@ -1,4 +1,4 @@
-# EctoSearchy
+# Searchy
 
 **TODO: Add description**
 

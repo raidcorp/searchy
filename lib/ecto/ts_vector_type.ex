@@ -1,4 +1,4 @@
-defmodule EctoSearchy.Ecto.TSVectorType do
+defmodule Searchy.Ecto.TSVectorType do
   use Ecto.Type
 
   def type, do: :tsvector

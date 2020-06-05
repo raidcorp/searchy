@@ -1,7 +1,7 @@
-defmodule EctoSearchy.SetupMigration do
+defmodule Searchy.SetupMigration do
   use Ecto.Migration
 
-  import EctoSearchyMigration
+  import SearchyMigration
 
   def up do
     create table(:schema_fixture) do

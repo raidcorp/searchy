@@ -1,18 +1,18 @@
-defmodule EctoSearchyMigration do
+defmodule SearchyMigration do
   defmacro __using__(_opts) do
     quote do
-      import EctoSearchyMigration, only: [create_ecto_searchy_type: 2, drop_ecto_searchy_type: 1]
+      import SearchyMigration, only: [create_ecto_searchy_type: 2, drop_ecto_searchy_type: 1]
     end
   end
 
   defmacro create_ecto_searchy_type(table_name, fields) do
     quote location: :keep do
       unquote(table_name)
-      |> EctoSearchyMigration.__create_ecto_searchy_function_sql__(:search_tsvector, unquote(fields))
+      |> SearchyMigration.__create_ecto_searchy_function_sql__(:search_tsvector, unquote(fields))
       |> Ecto.Migration.execute()
 
       unquote(table_name)
-      |> EctoSearchyMigration.__create_ecto_searchy_trigger_sql__()
+      |> SearchyMigration.__create_ecto_searchy_trigger_sql__()
       |> Ecto.Migration.execute()
     end
   end
@@ -20,11 +20,11 @@ defmodule EctoSearchyMigration do
   defmacro drop_ecto_searchy_type(table_name) do
     quote location: :keep do
       unquote(table_name)
-      |> EctoSearchyMigration.__drop_ecto_searchy_trigger_sql__()
+      |> SearchyMigration.__drop_ecto_searchy_trigger_sql__()
       |> Ecto.Migration.execute()
 
       unquote(table_name)
-      |> EctoSearchyMigration.__drop_ecto_searchy_function_sql__()
+      |> SearchyMigration.__drop_ecto_searchy_function_sql__()
       |> Ecto.Migration.execute()
 
       # TODO: Also drop column from table?
