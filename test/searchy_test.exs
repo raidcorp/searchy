@@ -8,42 +8,59 @@ defmodule SearchyTest do
 
   setup do
     TestRepo.delete_all(User)
-
     Enum.each(fixtures(), &TestRepo.insert!/1)
   end
 
-  test "returns correct tsvector name data" do
-    q = "jane:*"
+  describe "when tsvector" do
+    test "returns correct result for string search" do
+      search_term = "foo:*"
 
-    assert [%{name: "Jane Doe"}] = TestRepo.all(
-      from s in User,
-        where: fragment("? @@ to_tsquery(?)", s.search_tsvector, ^q)
-    )
-  end
+      filter = dynamic([u], fragment("? @@ to_tsquery(?)", u.search_tsvector, ^search_term))
 
-  test "returns correct tsvector age data" do
-    q = "33:*"
+      assert [%{name: "Foo"}] = TestRepo.all(from(u in User, where: ^filter))
+    end
 
-    assert [%{name: "John Doe"}] = TestRepo.all(
-      from s in User,
-        where: fragment("? @@ to_tsquery(?)", s.search_tsvector, ^q)
-    )
-  end
+    test "returns correct result for integer search" do
+      search_term = "42:*"
 
-  test "returns correct tsvector inserted_at data" do
-    q = "2020-06-04:*"
+      filter = dynamic([u], fragment("? @@ to_tsquery(?)", u.search_tsvector, ^search_term))
 
-    assert [%{name: "John doe ||"}] = TestRepo.all(
-      from s in User,
-        where: fragment("? @@ to_tsquery(?)", s.search_tsvector, ^q)
-    )
-  end
+      assert [%{name: "Fred"}] = TestRepo.all(from(u in User, where: ^filter))
+    end
 
-  defp fixtures do
-    [
-      %User{name: "John Doe", age: 33},
-      %User{name: "Jane Doe", age: 30},
-      %User{name: "John doe ||", age: 18, inserted_at: ~N[2020-06-04 00:00:00]}
-    ]
+    test "returns correct result for date search" do
+      search_term = "1970-01-01:*"
+
+      filter = dynamic([u], fragment("? @@ to_tsquery(?)", u.search_tsvector, ^search_term))
+
+      assert [%{name: "Thud"}] = TestRepo.all(from(u in User, where: ^filter))
+    end
+
+    test "returns correct result for boolean search" do
+      search_term = "true:*"
+
+      filter = dynamic([u], fragment("? @@ to_tsquery(?)", u.search_tsvector, ^search_term))
+
+      assert [%{name: "Xyzzy"}] = TestRepo.all(from(u in User, where: ^filter))
+    end
+
+    defp fixtures do
+      [
+        %User{name: "Foo", age: 0},
+        %User{name: "Bar", age: 1},
+        %User{name: "Baz", age: 2},
+        %User{name: "Qux", age: 3},
+        %User{name: "Quux", age: 4},
+        %User{name: "Quuz", age: 5},
+        %User{name: "Corge", age: 6},
+        %User{name: "Grault", age: 7},
+        %User{name: "Garply", age: 8},
+        %User{name: "Waldo", age: 9},
+        %User{name: "Fred", age: 42},
+        %User{name: "Plugh", age: 0},
+        %User{name: "Xyzzy", age: 0, active?: true},
+        %User{name: "Thud", age: 0, inserted_at: ~N[1970-01-01 00:00:00]}
+      ]
+    end
   end
 end
