@@ -1,12 +1,14 @@
 ExUnit.start()
 
 defmodule EctoSearchy.TestRepo do
-  use Ecto.Repo, otp_app: :ecto, adapter: Ecto.Adapters.Postgres
+  use Ecto.Repo, otp_app: :ecto_searchy, adapter: Ecto.Adapters.Postgres
 
   def log(_cmd), do: nil
+
+  def reload(%{id: id} = item), do: __MODULE__.get(item.__struct__, id)
 end
 
-Application.put_env(:ecto, EctoSearchy.TestRepo,
+Application.put_env(:ecto_searchy, EctoSearchy.TestRepo,
   url: "ecto://postgres:postgres@localhost/ecto_searchy",
   pool: Ecto.Adapters.SQL.Sandbox
 )
@@ -18,7 +20,8 @@ defmodule EctoSearchy.SchemaFixture do
   schema "schema_fixture" do
     field(:name, :string)
     field(:age, :integer)
-    tsvector_field()
+    field(:search_tsvector, EctoSearchy.Ecto.TSVectorType)
+
     timestamps()
   end
 end
