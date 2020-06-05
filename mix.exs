@@ -19,9 +19,9 @@ defmodule EctoSearchy.MixProject do
 
   defp deps do
     [
-      {:ecto, "~> 3.4"},
-      {:ecto_sql, "~> 3.4"},
-      {:postgrex, "~> 0.15.5"}
+      {:ecto, ">= 3.0.0"},
+      {:ecto_sql, ">= 3.0.0"},
+      {:postgrex, ">= 0.0.0"}
     ]
   end
 end
