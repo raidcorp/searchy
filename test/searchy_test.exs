@@ -1,6 +1,7 @@
 defmodule SearchyTest do
   use ExUnit.Case
   import Ecto.Query
+  import Searchy.Ecto.Query
 
   alias Searchy.{TestRepo, User}
 
@@ -15,7 +16,7 @@ defmodule SearchyTest do
     test "returns correct result for string search" do
       search_term = "foo:*"
 
-      filter = dynamic([u], fragment("? @@ to_tsquery(?)", u.search_tsvector, ^search_term))
+      filter = to_tsquery(:search_tsvector, search_term)
 
       assert [%{name: "Foo"}] = TestRepo.all(from(u in User, where: ^filter))
     end
@@ -23,7 +24,7 @@ defmodule SearchyTest do
     test "returns correct result for integer search" do
       search_term = "42:*"
 
-      filter = dynamic([u], fragment("? @@ to_tsquery(?)", u.search_tsvector, ^search_term))
+      filter = to_tsquery(:search_tsvector, search_term)
 
       assert [%{name: "Fred"}] = TestRepo.all(from(u in User, where: ^filter))
     end
@@ -31,7 +32,7 @@ defmodule SearchyTest do
     test "returns correct result for date search" do
       search_term = "1970-01-01:*"
 
-      filter = dynamic([u], fragment("? @@ to_tsquery(?)", u.search_tsvector, ^search_term))
+      filter = to_tsquery(:search_tsvector, search_term)
 
       assert [%{name: "Thud"}] = TestRepo.all(from(u in User, where: ^filter))
     end
@@ -39,7 +40,7 @@ defmodule SearchyTest do
     test "returns correct result for boolean search" do
       search_term = "true:*"
 
-      filter = dynamic([u], fragment("? @@ to_tsquery(?)", u.search_tsvector, ^search_term))
+      filter = to_tsquery(:search_tsvector, search_term)
 
       assert [%{name: "Xyzzy"}] = TestRepo.all(from(u in User, where: ^filter))
     end
