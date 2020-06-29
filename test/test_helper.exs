@@ -1,15 +1,15 @@
 ExUnit.start()
 
 defmodule Searchy.TestRepo do
-  use Ecto.Repo, otp_app: :ecto_searchy, adapter: Ecto.Adapters.Postgres
+  use Ecto.Repo, otp_app: :searchy, adapter: Ecto.Adapters.Postgres
 
   def log(_cmd), do: nil
 
   def reload(%{id: id} = item), do: __MODULE__.get(item.__struct__, id)
 end
 
-Application.put_env(:ecto_searchy, Searchy.TestRepo,
-  url: "ecto://postgres:postgres@localhost/ecto_searchy",
+Application.put_env(:searchy, Searchy.TestRepo,
+  url: "ecto://postgres:postgres@localhost/searchy",
   pool: Ecto.Adapters.SQL.Sandbox
 )
 
