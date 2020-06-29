@@ -1,7 +1,7 @@
 defmodule Searchy.SetupMigration do
   use Ecto.Migration
 
-  import Searchy.Ecto.Migration
+  use Searchy.Ecto.Migration
 
   def up do
     create table(:users) do
