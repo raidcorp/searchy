@@ -13,12 +13,12 @@ defmodule Searchy.SetupMigration do
       timestamps()
     end
 
-    create_searchy_type(:users, [:name, :age, :active?, :inserted_at], :search_tsvector)
+    create_search_for(:users, [:name, :age, :active?, :inserted_at], :search_tsvector)
   end
 
   def down do
     drop(table("users"))
 
-    drop_searchy_type(:users, [:name, :age, :active?, :inserted_at])
+    drop_search_for(:users, [:name, :age, :active?, :inserted_at])
   end
 end
