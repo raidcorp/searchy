@@ -11,7 +11,8 @@ end
 
 Application.put_env(:searchy, Searchy.TestRepo,
   url: "ecto://postgres:postgres@localhost/searchy",
-  pool: Ecto.Adapters.SQL.Sandbox
+  pool: Ecto.Adapters.SQL.Sandbox,
+  log: false
 )
 
 defmodule Searchy.User do

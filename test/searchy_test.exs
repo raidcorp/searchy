@@ -12,25 +12,8 @@ defmodule SearchyTest do
     Enum.each(fixtures(), &TestRepo.insert!/1)
   end
 
-  describe "repo" do
-    import Searchy.Ecto.Repo
-
-    test "search/3 uses prefix when defined" do
-      filter = to_tsquery(:search_tsvector, "search term")
-
-      assert %Ecto.Query{prefix: "foo"} = search(from(u in User), filter, prefix: "foo")
-    end
-
-    test "search/3 prefix defaults to nil when not defined" do
-      filter = to_tsquery(:search_tsvector, "search term")
-
-      assert %Ecto.Query{prefix: nil} = search(from(u in User), filter)
-    end
-
-  end
-
-  describe "when tsvector" do
-    test "returns correct result for string search" do
+  describe "returns correct result for" do
+    test "string search" do
       search_term = "foo:*"
 
       filter = to_tsquery(:search_tsvector, search_term)
@@ -38,7 +21,7 @@ defmodule SearchyTest do
       assert [%{name: "Foo"}] = TestRepo.all(from(u in User, where: ^filter))
     end
 
-    test "returns correct result for integer search" do
+    test "integer search" do
       search_term = "42:*"
 
       filter = to_tsquery(:search_tsvector, search_term)
@@ -46,7 +29,7 @@ defmodule SearchyTest do
       assert [%{name: "Fred"}] = TestRepo.all(from(u in User, where: ^filter))
     end
 
-    test "returns correct result for date search" do
+    test "date search" do
       search_term = "1970-01-01:*"
 
       filter = to_tsquery(:search_tsvector, search_term)
@@ -54,7 +37,7 @@ defmodule SearchyTest do
       assert [%{name: "Thud"}] = TestRepo.all(from(u in User, where: ^filter))
     end
 
-    test "returns correct result for boolean search" do
+    test "boolean search" do
       search_term = "true:*"
 
       filter = to_tsquery(:search_tsvector, search_term)
