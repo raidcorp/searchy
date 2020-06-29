@@ -13,7 +13,7 @@ defmodule Searchy.SetupMigration do
       timestamps()
     end
 
-    create_search_for(:users, [:name, :age, :active?, :inserted_at], :search_tsvector)
+    create_search_for(:users, [:name, :age, :active?, :inserted_at], column: :search_tsvector)
   end
 
   def down do
