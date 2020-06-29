@@ -2,6 +2,7 @@ ExUnit.start()
 
 defmodule Searchy.TestRepo do
   use Ecto.Repo, otp_app: :searchy, adapter: Ecto.Adapters.Postgres
+  use Searchy.Ecto.Repo
 
   def log(_cmd), do: nil
 

@@ -12,6 +12,23 @@ defmodule SearchyTest do
     Enum.each(fixtures(), &TestRepo.insert!/1)
   end
 
+  describe "repo" do
+    import Searchy.Ecto.Repo
+
+    test "search/3 uses prefix when defined" do
+      filter = to_tsquery(:search_tsvector, "search term")
+
+      assert %Ecto.Query{prefix: "foo"} = search(from(u in User), filter, prefix: "foo")
+    end
+
+    test "search/3 prefix defaults to nil when not defined" do
+      filter = to_tsquery(:search_tsvector, "search term")
+
+      assert %Ecto.Query{prefix: nil} = search(from(u in User), filter)
+    end
+
+  end
+
   describe "when tsvector" do
     test "returns correct result for string search" do
       search_term = "foo:*"
