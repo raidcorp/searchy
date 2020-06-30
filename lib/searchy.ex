@@ -1,0 +1,3 @@
+defmodule Searchy do
+
+end
