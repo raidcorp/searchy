@@ -11,7 +11,11 @@ defmodule Searchy.Ecto.Helpers do
     "#{table_name}_searchy_trigger_#{digest}"
   end
 
-  defp digest_fields(fields) do
+  def escape_prefix_name(term, nil), do: escape_prefix_name(term, :public)
+
+  def escape_prefix_name(term, prefix), do: ~s("#{prefix}".#{term})
+
+  def digest_fields(fields) do
     :md4
     |> :crypto.hash(Enum.join(fields))
     |> :binary.decode_unsigned()
