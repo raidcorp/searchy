@@ -72,6 +72,8 @@ end
 In your context:
 
 ```elixir
+import Searchy.Ecto.Query
+
 def search_users_by(search_term) do
   filter = to_tsquery(:search_tsvector, search_term)
   MyRepo.search(from u in User, filter)
