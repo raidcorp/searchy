@@ -1,6 +1,16 @@
 defmodule Searchy.Ecto.Query do
+  @moduledoc """
+  Provides search functionality to work with `tsvector` columns.
+  For more information you can lookup the Postgres documentation on:
+  https://www.postgresql.org/docs/current/textsearch-controls.html
+  """
+
   import Ecto.Query
 
+  @doc """
+  Transforms the `search_term` in a Postgres `tsquery` data type fragment.
+  """
+  @spec to_tsquery(atom() | binary(), binary()) :: %Ecto.Query.DynamicExpr{}
   def to_tsquery(search_field, search_term) do
     dynamic(
       [x],
@@ -12,6 +22,7 @@ defmodule Searchy.Ecto.Query do
     )
   end
 
+  @doc false
   def plainto_tsquery(search_field, search_term) do
     dynamic(
       [x],
@@ -23,6 +34,7 @@ defmodule Searchy.Ecto.Query do
     )
   end
 
+  @doc false
   def ts_rank(search_field, search_term) do
     dynamic(
       [x],
@@ -34,6 +46,7 @@ defmodule Searchy.Ecto.Query do
     )
   end
 
+  @doc false
   def ts_rank_cd(search_field, search_term) do
     dynamic(
       [x],
@@ -45,6 +58,7 @@ defmodule Searchy.Ecto.Query do
     )
   end
 
+  @doc false
   def ts_headline(search_field, search_term) do
     dynamic(
       [x],
@@ -55,5 +69,4 @@ defmodule Searchy.Ecto.Query do
       )
     )
   end
-
 end
