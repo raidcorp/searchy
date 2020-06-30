@@ -10,7 +10,7 @@ by adding `searchy` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:searchy, "~> 0.1.0"}
+    {:searchy, "~> 0.1.1"}
   ]
 end
 ```
@@ -20,7 +20,7 @@ Alternatively, you can link package directly from this repository:
 ```elixir
 def deps do
   [
-    {:searchy, git: "https://github.com/raidcorp/searchy", tag: "v0.1.0"}
+    {:searchy, git: "https://github.com/raidcorp/searchy", tag: "v0.1.1"}
   ]
 end
 ```
