@@ -6,10 +6,14 @@ defmodule Searchy.Ecto.SQL do
   def create_trigger_sql(table, columns, prefix) do
     table_name = escape_prefix_name(table, prefix)
     trigger_name = expand_trigger_name(table, columns)
-    function_name = expand_function_name(table_name, columns)
-
+    
+    function_name =
+      table
+      |> expand_function_name(columns)
+      |> escape_prefix_name(prefix)
+      
     """
-    CREATE TRIGGER #{trigger_name}
+    CREATE TRIGGER "#{trigger_name}"
     BEFORE INSERT OR UPDATE ON #{table_name}
     FOR EACH ROW EXECUTE PROCEDURE #{function_name}()
     """
@@ -19,7 +23,7 @@ defmodule Searchy.Ecto.SQL do
     table_name = escape_prefix_name(table, prefix)
     trigger_name = expand_trigger_name(table, columns)
 
-    "DROP TRIGGER #{trigger_name} ON #{table_name}"
+    ~s(DROP TRIGGER "#{trigger_name}" ON #{table_name})
   end
 
   def create_function_sql(table, search_column, columns, prefix) do
@@ -31,10 +35,12 @@ defmodule Searchy.Ecto.SQL do
       columns
       |> Enum.map(&to_sql.(&1))
       |> Enum.join(" || ")
-
-    table_name = escape_prefix_name(table, prefix)
-    function_name = expand_function_name(table_name, columns)
-
+      
+    function_name =
+      table
+      |> expand_function_name(columns)
+      |> escape_prefix_name(prefix)
+      
     """
     CREATE OR REPLACE FUNCTION #{function_name}()
     RETURNS trigger AS $$
@@ -47,8 +53,10 @@ defmodule Searchy.Ecto.SQL do
   end
 
   def drop_function_sql(table, columns, prefix) do
-    table_name = escape_prefix_name(table, prefix)
-    function_name = expand_function_name(table_name, columns)
+    function_name =
+      table
+      |> expand_function_name(columns)
+      |> escape_prefix_name(prefix)
 
     "DROP FUNCTION #{function_name}"
   end
