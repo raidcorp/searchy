@@ -22,8 +22,8 @@ defmodule Searchy.Ecto.SQL do
   def drop_trigger_sql(table, columns, prefix) do
     table_name = escape_prefix_name(table, prefix)
     trigger_name = expand_trigger_name(table, columns)
-
-    ~s(DROP TRIGGER "#{trigger_name}" ON #{table_name})
+    
+    ~s(DROP TRIGGER IF EXISTS "#{trigger_name}" ON #{table_name})
   end
 
   def create_function_sql(table, search_column, columns, prefix) do
